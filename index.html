@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Video Platform</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #1f1f1f;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #333;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .main-player {
+            flex: 2;
+        }
+        .video-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+        .video-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .playlist {
+            flex: 1;
+            background: #181818;
+            border-radius: 12px;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+        .playlist h3 {
+            margin-top: 0;
+            font-size: 18px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .playlist-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #212121;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .playlist-item:hover, .playlist-item.active {
+            background: #333;
+            color: #3ea6ff;
+        }
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        🎬 My Video Stream
+    </header>
+
+    <div class="container">
+        <!-- বড় ভিডিও প্লেয়ার সেকশন -->
+        <div class="main-player">
+            <div class="video-box">
+                <iframe id="videoPlayer" src="" title="Video Player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <h2 id="videoTitle" style="margin-top: 15px; font-size: 20px;">ভিডিও লোড হচ্ছে...</h2>
+        </div>
+
+        <!-- সাইডে ভিডিওর লিস্ট বা প্লেলিস্ট -->
+        <div class="playlist">
+            <h3>ভিডিও তালিকা</h3>
+            <div id="playlistItems">
+                <!-- এখানে আপনার ভিডিওগুলোর তালিকা জাভাস্ক্রিপ্ট দিয়ে আসবে -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // আপনার পছন্দের ইউটিউব ভিডিওর আইডি ও নাম এখানে যুক্ত করতে পারবেন
+        const videos = [
+            { id: "dQw4w9WgXcQ", title: "ভিডিও শিরোনাম ১ - এখানে নাম দিন" },
+            { id: "3JZ_D3ELwOQ", title: "ভিডিও শিরোনাম ২ - এখানে নাম দিন" },
+            { id: "L_LUpnjgPso", title: "ভিডিও শিরোনাম ৩ - এখানে নাম দিন" }
+        ];
+
+        let currentIndex = 0;
+        const player = document.getElementById("videoPlayer");
+        const titleEl = document.getElementById("videoTitle");
+        const playlistContainer = document.getElementById("playlistItems");
+
+        function loadVideo(index) {
+            currentIndex = index;
+            const video = videos[currentIndex];
+            player.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&controls=1&modestbranding=1&rel=0`;
+            titleEl.innerText = video.title;
+
+            document.querySelectorAll(".playlist-item").forEach((item, idx) => {
+                if (idx === currentIndex) {
+                    item.classList.add("active");
+                } else {
+                    item.classList.remove("active");
+                }
+            });
+        }
+
+        videos.forEach((video, index) => {
+            const div = document.createElement("div");
+            div.className = "playlist-item";
+            div.innerText = `${index + 1}. ${video.title}`;
+            div.onclick = () => loadVideo(index);
+            playlistContainer.appendChild(div);
+        });
+
+        if(videos.length > 0) {
+            loadVideo(0);
+        }
+    </script>
+
+</body>
+</html>
